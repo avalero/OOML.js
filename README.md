@@ -2,5 +2,7 @@
 Object Oriented Modelling Language
 
 ## How to run
-  npm install
-  npm run dev
+
+    npm install
+    npm start
+
