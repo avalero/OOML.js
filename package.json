@@ -43,6 +43,7 @@
     "webpack-dev-server": "^3.1.4"
   },
   "dependencies": {
-    "babel-plugin-emotion": "^9.2.5"
+    "babel-plugin-emotion": "^9.2.5",
+    "three": "^0.94.0"
   }
 }
