@@ -17,14 +17,6 @@ module.exports = {
   ],
   module: {
     rules: [{
-      enforce: 'pre',
-      test: /\.js$/,
-      exclude: /node_modules/,
-      loader: 'eslint-loader',
-      options:{
-        emitWarning:true,
-      }
-    }, {
       test: /(\.css|\.scss)$/,
       exclude: /node_modules/,
       use: [
