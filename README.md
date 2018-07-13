@@ -56,3 +56,31 @@ for(let i = -5; i<5; i++){
 }
 
 ```
+
+### Example 3 -  OpenSCAD Style 
+
+You can also design "as in" OpenSCAD. It is not OpenSCAD language, but it is the same coding style.
+
+```javascript
+
+//Union of several objects
+Union(
+  Cube(1,1,1),
+  Cylinder(0.2,2)  
+);
+
+//Translation of several objetcs (x=2, y=3, z=1)
+Translate([2,3,1],
+  Cube(1,1,1),
+  Cylinder(0.2,2)  
+);
+
+//Composed operations (translation of the union)
+Translate([2,3,1],
+  Union(
+    Cube(1,1,1),
+    Cylinder(0.2,2)  
+  )
+);
+
+```
