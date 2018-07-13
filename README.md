@@ -17,7 +17,7 @@ Check the rest of dependencies on [package.json file](./package.json)
 
 ### Example 1
 
-![Alt text](/images/image1.png?raw=true "Union, Difference, Intersection")
+![Alt text](/images/example1.png?raw=true "Union, Difference, Intersection")
 
 ```javascript
 
@@ -45,5 +45,20 @@ Check the rest of dependencies on [package.json file](./package.json)
     OOMLScene.push(myObj1);
     OOMLScene.push(myObj2);
     OOMLScene.push(myObj3);
+
+```
+### Example 1
+
+![Alt text](/images/example2.png?raw=true "For loop")
+
+```javascript
+
+for(let i = -5; i<5; i++){
+  for (let j=-5; j<5; j++){
+    let cube = Cube(0.03,0.03,0.1);
+    cube.translate(i/10,j/10,0);
+    OOMLScene.push(cube);
+  }
+}
 
 ```
