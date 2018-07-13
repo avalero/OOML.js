@@ -1,5 +1,10 @@
 # OOML.js
-Object Oriented Modelling Language
+Object Oriented Modelling Language. It is build upon [Three.js](https://threejs.org/). Check the rest of dependencies on [package.json file](./package.json)
+
+## LICENSE
+[MIT License](https://opensource.org/licenses/MIT)
+
+
 
 ## How to run
 
