@@ -1,6 +1,8 @@
 import * as THREE from 'three';
 import { Cube, Cylinder, Sphere, Union, Difference, Intersection } from './lib/ooml';
 import { ThreeBSP } from './lib/threeCSG';
+import { THREESTLExporter } from './lib/STLExporter'
+import {saveAs} from 'file-saver';
 
 let camera;
 let scene;
@@ -50,6 +52,8 @@ function init() {
     scene.add(element.toTHREEMesh());
   });
 
+  
+
   renderer = new THREE.WebGLRenderer({ antialias: true });
   renderer.setSize(window.innerWidth, window.innerHeight);
   document.body.appendChild(renderer.domElement);
@@ -57,6 +61,14 @@ function init() {
 
 function show() {
   renderer.render(scene, camera);
+
+  var exporter = new THREE.STLExporter();
+
+  // second argument is a list of options
+  const stlString = exporter.parse( scene );
+  let blob = new Blob([stlString], {type: 'text/plain'});
+  //saveAs(blob, "escena" + '.stl');
+
 }
 
 init();
