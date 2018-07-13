@@ -6,9 +6,12 @@ Object Oriented Modelling Language
     npm install
     npm run dev
 
-## OOML.js code sample
+## OOML.js code samples
 
-(This code results in the 3D model shown when you run 'npm run dev')
+### Example 1
+
+![Alt text](/images/image1.png?raw=true "Union, Difference, Intersection")
+
 
     myCube1 = Cube(0.2, 0.2, 0.2);
     myCube2 = Cube(0.2, 0.2, 0.2);
