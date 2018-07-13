@@ -1,5 +1,7 @@
 # OOML.js
-Object Oriented Modelling Language. It is build upon [Three.js](https://threejs.org/). Check the rest of dependencies on [package.json file](./package.json)
+Object Oriented Modelling Language. It is built upon [Three.js](https://threejs.org/). It uses [THREE.STLExpoerter](https://www.npmjs.com/package/three-stlexporter) to generate STL files. Editor is [Monaco-editor](https://github.com/Microsoft/monaco-editor/). 
+
+Check the rest of dependencies on [package.json file](./package.json)
 
 ## LICENSE
 [MIT License](https://opensource.org/licenses/MIT)
