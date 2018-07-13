@@ -41,11 +41,6 @@ Check the rest of dependencies on [package.json file](./package.json)
     myObj3.translate(-0.5, 0, 0);
     myObj3.rotate(45,0,0);
 
-
-    OOMLScene.push(myObj1);
-    OOMLScene.push(myObj2);
-    OOMLScene.push(myObj3);
-
 ```
 ### Example 2 - For loop
 
@@ -57,7 +52,6 @@ for(let i = -5; i<5; i++){
   for (let j=-5; j<5; j++){
     let cube = Cube(0.03,0.03,0.1);
     cube.translate(i/10,j/10,0);
-    OOMLScene.push(cube);
   }
 }
 
