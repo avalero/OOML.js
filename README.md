@@ -15,7 +15,7 @@ Check the rest of dependencies on [package.json file](./package.json)
 
 ## OOML.js code samples
 
-### Example 1
+### Example 1 - Union, Difference, Intersection
 
 ![Alt text](/images/example1.png?raw=true "Union, Difference, Intersection")
 
@@ -47,7 +47,7 @@ Check the rest of dependencies on [package.json file](./package.json)
     OOMLScene.push(myObj3);
 
 ```
-### Example 1
+### Example 2 - For loop
 
 ![Alt text](/images/example2.png?raw=true "For loop")
 
