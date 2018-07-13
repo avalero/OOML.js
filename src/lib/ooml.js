@@ -116,9 +116,9 @@ class BooleanBSP extends Object3D {
     this.OOMLMesh1 = OOMLMesh1;
     this.OOMLMesh2 = OOMLMesh2;
 
-    //when to mesh come together, remove them from scene
-    remove(OOMLScene,OOMLMesh1);
-    remove(OOMLScene,OOMLMesh2);
+    // when to mesh come together, remove them from scene
+    remove(OOMLScene, OOMLMesh1);
+    remove(OOMLScene, OOMLMesh2);
   }
 
   toTHREEMesh() {
@@ -181,6 +181,18 @@ export function Difference(obj1, obj2) {
 
 export function Intersection(obj1, obj2) {
   return new IntersectionClassBSP(obj1, obj2);
+}
+
+export function Translate(xyz, ...args) {
+  args.forEach((element) => {
+    element.translate(xyz[0], xyz[1], xyz[2]);
+  });
+}
+
+export function Rotate(xyz, ...args) {
+  args.forEach((element) => {
+    element.rotate(xyz[0], xyz[1], xyz[2]);
+  });
 }
 
 export { OOMLScene };
