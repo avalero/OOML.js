@@ -1,6 +1,16 @@
 import * as THREE from 'three';
 import { ThreeBSP } from './threeCSG';
 
+const OOMLScene = [];
+
+function remove(array, element) {
+  const index = array.indexOf(element);
+
+  if (index !== -1) {
+    array.splice(index, 1);
+  }
+}
+
 class Object3D {
   constructor() {
     this.rotateX = 0;
@@ -9,6 +19,7 @@ class Object3D {
     this.xp = 0;
     this.yp = 0;
     this.zp = 0;
+    OOMLScene.push(this);
   }
 
   rotate(x, y, z) {
@@ -99,35 +110,15 @@ class CylinderClass extends Object3D {
   }
 }
 
-class BooleanBSP {
-  constructor() {
-    this.rotateX = 0;
-    this.rotateY = 0;
-    this.rotateZ = 0;
-    this.xp = 0;
-    this.yp = 0;
-    this.zp = 0;
-  }
+class BooleanBSP extends Object3D {
+  constructor(OOMLMesh1, OOMLMesh2) {
+    super();
+    this.OOMLMesh1 = OOMLMesh1;
+    this.OOMLMesh2 = OOMLMesh2;
 
-  rotate(x, y, z) {
-    this.rotateX = x;
-    this.rotateY = y;
-    this.rotateZ = z;
-    return this;
-  }
-
-  translate(x, y, z) {
-    this.xp += x;
-    this.yp += y;
-    this.zp += z;
-    return this;
-  }
-
-  locate(mesh) {
-    mesh.position.set(this.xp, this.yp, this.zp);
-    mesh.rotation.set(this.rotateX, this.rotateY, this.rotateZ);
-
-    return mesh;
+    //when to mesh come together, remove them from scene
+    remove(OOMLScene,OOMLMesh1);
+    remove(OOMLScene,OOMLMesh2);
   }
 
   toTHREEMesh() {
@@ -139,7 +130,7 @@ class BooleanBSP {
 
 class UnionClassBSP extends BooleanBSP {
   constructor(OOMLMesh1, OOMLMesh2) {
-    super();
+    super(OOMLMesh1, OOMLMesh2);
     const meshBSP1 = new ThreeBSP(OOMLMesh1.toTHREEMesh());
     const meshBSP2 = new ThreeBSP(OOMLMesh2.toTHREEMesh());
 
@@ -149,7 +140,7 @@ class UnionClassBSP extends BooleanBSP {
 
 class DifferenceClassBSP extends BooleanBSP {
   constructor(OOMLMesh1, OOMLMesh2) {
-    super();
+    super(OOMLMesh1, OOMLMesh2);
     const meshBSP1 = new ThreeBSP(OOMLMesh1.toTHREEMesh());
     const meshBSP2 = new ThreeBSP(OOMLMesh2.toTHREEMesh());
 
@@ -159,7 +150,7 @@ class DifferenceClassBSP extends BooleanBSP {
 
 class IntersectionClassBSP extends BooleanBSP {
   constructor(OOMLMesh1, OOMLMesh2) {
-    super();
+    super(OOMLMesh1, OOMLMesh2);
     const meshBSP1 = new ThreeBSP(OOMLMesh1.toTHREEMesh());
     const meshBSP2 = new ThreeBSP(OOMLMesh2.toTHREEMesh());
 
@@ -191,3 +182,5 @@ export function Difference(obj1, obj2) {
 export function Intersection(obj1, obj2) {
   return new IntersectionClassBSP(obj1, obj2);
 }
+
+export { OOMLScene };

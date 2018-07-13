@@ -1,14 +1,25 @@
 # OOML.js
-Object Oriented Modelling Language
+Object Oriented Modelling Language. It is built upon [Three.js](https://threejs.org/). It uses [THREE.STLExpoerter](https://www.npmjs.com/package/three-stlexporter) to generate STL files. Editor is [Monaco-editor](https://github.com/Microsoft/monaco-editor/). 
+
+Check the rest of dependencies on [package.json file](./package.json)
+
+## LICENSE
+[MIT License](https://opensource.org/licenses/MIT)
+
+
 
 ## How to run
 
     npm install
     npm run dev
 
-## OOML.js code sample
+## OOML.js code samples
 
-(This code results in the 3D model shown when you run 'npm run dev')
+### Example 1 - Union, Difference, Intersection
+
+![Alt text](/images/example1.png?raw=true "Union, Difference, Intersection")
+
+```javascript
 
     myCube1 = Cube(0.2, 0.2, 0.2);
     myCube2 = Cube(0.2, 0.2, 0.2);
@@ -30,8 +41,18 @@ Object Oriented Modelling Language
     myObj3.translate(-0.5, 0, 0);
     myObj3.rotate(45,0,0);
 
+```
+### Example 2 - For loop
 
-    OOMLScene.push(myObj1);
-    OOMLScene.push(myObj2);
-    OOMLScene.push(myObj3);
+![Alt text](/images/example2.png?raw=true "For loop")
 
+```javascript
+
+for(let i = -5; i<5; i++){
+  for (let j=-5; j<5; j++){
+    let cube = Cube(0.03,0.03,0.1);
+    cube.translate(i/10,j/10,0);
+  }
+}
+
+```
