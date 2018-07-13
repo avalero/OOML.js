@@ -1,22 +1,14 @@
 import * as THREE from 'three';
+import * as monaco from 'monaco-editor'
 import { Cube, Cylinder, Sphere, Union, Difference, Intersection } from './lib/ooml';
 import { ThreeBSP } from './lib/threeCSG';
 import { THREESTLExporter } from './lib/STLExporter'
 import {saveAs} from 'file-saver';
 
-let camera;
-let scene;
 let renderer;
 
-
-const OOMLScene = [];
-
 function init() {
-  camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.01, 10);
-  camera.position.z = 1;
-  scene = new THREE.Scene();
-
-  const code = `
+  const initialCode = `
 
   myCube1 = Cube(0.2, 0.2, 0.2);
   myCube2 = Cube(0.2, 0.2, 0.2);
@@ -45,31 +37,59 @@ function init() {
 
 `;
 
-  const f = new Function('OOMLScene', 'Cube', 'Cylinder', 'Sphere', 'Union', 'Difference', 'Intersection', code);
-  f(OOMLScene, Cube, Cylinder, Sphere, Union, Difference, Intersection);
-
-  OOMLScene.forEach((element) => {
-    scene.add(element.toTHREEMesh());
-  });
 
   
 
+  const rendererEl = document.querySelector('.renderer');
+  const {width, height} = rendererEl.getBoundingClientRect();
+
   renderer = new THREE.WebGLRenderer({ antialias: true });
-  renderer.setSize(window.innerWidth, window.innerHeight);
-  document.body.appendChild(renderer.domElement);
+  renderer.setSize(width, height);
+
+  rendererEl.appendChild(renderer.domElement);
+
+  const codeEl = document.querySelector('.code');
+  const editor = monaco.editor.create(codeEl, {
+    value: initialCode,
+    language: 'javascript'
+  });
+
+  editor.onDidChangeModelContent((event) => {
+    show(editor.getValue());
+  });
+
+  show(initialCode);
 }
 
-function show() {
-  renderer.render(scene, camera);
+function show(code) {
+  const OOMLScene = [];
+  const rendererEl = document.querySelector('.renderer');
+  const {width, height} = rendererEl.getBoundingClientRect();
+  const camera = new THREE.PerspectiveCamera(70, width / height, 0.01, 10);
+  camera.position.z = 1;
+  const scene = new THREE.Scene();
 
-  var exporter = new THREE.STLExporter();
+  const f = new Function('OOMLScene', 'Cube', 'Cylinder', 'Sphere', 'Union', 'Difference', 'Intersection', code);
 
-  // second argument is a list of options
-  const stlString = exporter.parse( scene );
-  let blob = new Blob([stlString], {type: 'text/plain'});
-  //saveAs(blob, "escena" + '.stl');
+  try {
+    f(OOMLScene, Cube, Cylinder, Sphere, Union, Difference, Intersection);
 
+    OOMLScene.forEach((element) => {
+      scene.add(element.toTHREEMesh());
+    });
+
+    renderer.render(scene, camera);
+
+    var exporter = new THREE.STLExporter();
+
+    // second argument is a list of options
+    const stlString = exporter.parse( scene );
+    let blob = new Blob([stlString], {type: 'text/plain'});
+    //saveAs(blob, "escena" + '.stl');
+
+  } catch (e) {
+    console.log('Error compiling', e);
+  }
 }
 
 init();
-show();

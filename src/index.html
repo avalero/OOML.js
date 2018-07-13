@@ -6,8 +6,28 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link href="https://fonts.googleapis.com/css?family=Jua" rel="stylesheet">
     <title>OOML Test</title>
+    <style>
+      body {
+        margin: 0px;
+      }
+      .container {
+        display: flex;
+        position: absolute;
+        width: 100%;
+        height: 100%;
+      }
+      .renderer {
+        flex: 1;
+      }
+      .code {
+        flex: 1;
+      }
+    </style>
   </head>
   <body>
-    <section id="index"></section>
+    <div class="container">
+      <div class="code"></div>
+      <div class="renderer"></div>
+    </div>
   </body>
 </html>
