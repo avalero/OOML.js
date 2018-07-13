@@ -1,9 +1,8 @@
 import * as THREE from 'three';
 import * as monaco from 'monaco-editor';
 import {
- Cube, Cylinder, Sphere, Union, Difference, Intersection 
+  Cube, Cylinder, Sphere, Union, Difference, Intersection, OOMLScene
 } from './lib/ooml';
-import { ThreeBSP } from './lib/threeCSG';
 import { } from './lib/STLExporter';
 import { saveAs } from 'file-saver';
 
@@ -32,11 +31,6 @@ function init() {
   myObj3.translate(-0.5, 0, 0);
   myObj3.rotate(45,0,0);
 
-
-  OOMLScene.push(myObj1);
-  OOMLScene.push(myObj2);
-  OOMLScene.push(myObj3);
-
 `;
 
   const rendererEl = document.querySelector('.renderer');
@@ -53,7 +47,7 @@ function init() {
     language: 'javascript',
   });
 
-  editor.onDidChangeModelContent((event) => {
+  editor.onDidChangeModelContent(() => {
     show(editor.getValue());
   });
 
@@ -61,10 +55,7 @@ function init() {
 }
 
 function show(code) {
-
-  
-
-  const OOMLScene = [];
+  OOMLScene.length = 0;
   const rendererEl = document.querySelector('.renderer');
   const { width, height } = rendererEl.getBoundingClientRect();
   const camera = new THREE.PerspectiveCamera(70, width / height, 0.01, 10);
@@ -74,8 +65,7 @@ function show(code) {
   const f = new Function('OOMLScene', 'Cube', 'Cylinder', 'Sphere', 'Union', 'Difference', 'Intersection', code);
 
   try {
-
-    var makeSTL = false;
+    let makeSTL = false;
 
     makeSTL = f(OOMLScene, Cube, Cylinder, Sphere, Union, Difference, Intersection) || false;
 
@@ -85,10 +75,10 @@ function show(code) {
 
     renderer.render(scene, camera);
 
-    console.log("Make STL: " + makeSTL);
+    console.log('Make STL: ' + makeSTL);
 
     if (makeSTL) {
-      let exporter = new THREE.STLExporter();
+      const exporter = new THREE.STLExporter();
       const stlString = exporter.parse(scene);
       const blob = new Blob([stlString], { type: 'text/plain' });
       saveAs(blob, 'escena' + '.stl');
