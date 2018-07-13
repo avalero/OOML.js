@@ -17,6 +17,7 @@ Object Oriented Modelling Language. It is build upon [Three.js](https://threejs.
 
 ![Alt text](/images/image1.png?raw=true "Union, Difference, Intersection")
 
+```javascript
 
     myCube1 = Cube(0.2, 0.2, 0.2);
     myCube2 = Cube(0.2, 0.2, 0.2);
@@ -43,3 +44,4 @@ Object Oriented Modelling Language. It is build upon [Three.js](https://threejs.
     OOMLScene.push(myObj2);
     OOMLScene.push(myObj3);
 
+```
