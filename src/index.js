@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import * as monaco from 'monaco-editor';
 import {
-  Cube, Cylinder, Sphere, Union, Difference, Intersection, OOMLScene
+  OOMLScene, Cube, Cylinder, Sphere, Union, Difference, Intersection, Translate, Rotate 
 } from './lib/ooml';
 import { } from './lib/STLExporter';
 import { saveAs } from 'file-saver';
@@ -54,6 +54,7 @@ function init() {
   show(initialCode);
 }
 
+const newLocal = 'Cube';
 function show(code) {
   OOMLScene.length = 0;
   const rendererEl = document.querySelector('.renderer');
@@ -62,12 +63,23 @@ function show(code) {
   camera.position.z = 1;
   const scene = new THREE.Scene();
 
-  const f = new Function('OOMLScene', 'Cube', 'Cylinder', 'Sphere', 'Union', 'Difference', 'Intersection', code);
+  const f = new Function(
+    'OOMLScene', 
+    'Cube',
+    'Cylinder', 
+    'Sphere', 
+    'Union', 
+    'Difference', 
+    'Intersection',
+    'Translate',
+    'Rotate',
+    code
+  );
 
   try {
     let makeSTL = false;
 
-    makeSTL = f(OOMLScene, Cube, Cylinder, Sphere, Union, Difference, Intersection) || false;
+    makeSTL = f(OOMLScene, Cube, Cylinder, Sphere, Union, Difference, Intersection, Translate, Rotate) || false;
 
     OOMLScene.forEach((element) => {
       scene.add(element.toTHREEMesh());
