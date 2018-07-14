@@ -3,6 +3,12 @@ import { ThreeBSP } from './threeCSG';
 
 const OOMLScene = [];
 
+const OOMLConfig = {
+  makeSTL: false,
+  drawGlobalAxis: true,
+  drawObjectAxis: false,
+};
+
 function remove(array, element) {
   const index = array.indexOf(element);
 
@@ -20,26 +26,24 @@ class Object3D {
     this.yp = 0;
     this.zp = 0;
     OOMLScene.push(this);
+    this.operation = [];
   }
 
   rotate(x, y, z) {
-    this.rotateX = x;
-    this.rotateY = y;
-    this.rotateZ = z;
+    this.operation.push(['r', [x, y, z]]);
     return this;
   }
 
   translate(x, y, z) {
-    this.xp += x;
-    this.yp += y;
-    this.zp += z;
+    this.operation.push(['t', [x, y, z]]);
     return this;
   }
 
   locate(mesh) {
-    mesh.position.set(this.xp, this.yp, this.zp);
-    mesh.rotation.set(this.rotateX, this.rotateY, this.rotateZ);
-
+    this.operation.forEach((element) => {
+      if (element[0] === 'r') mesh.rotation.set(element[1][0], element[1][1], element[1][2]);
+      if (element[0] === 't') mesh.position.set(element[1][0], element[1][1], element[1][2]);
+    });
     return mesh;
   }
 }
@@ -195,4 +199,4 @@ export function Rotate(xyz, ...args) {
   });
 }
 
-export { OOMLScene };
+export { OOMLScene, OOMLConfig };
