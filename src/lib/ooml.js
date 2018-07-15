@@ -58,7 +58,7 @@ class CubeClass extends Object3D {
 
   toTHREEMesh() {
     const geometry = new THREE.BoxGeometry(this.sx, this.sy, this.sz);
-    const material = new THREE.MeshNormalMaterial();
+    const material = new THREE.MeshLambertMaterial({color: 0xff0000});
 
     const mesh = new THREE.Mesh(geometry, material);
 
@@ -74,7 +74,7 @@ class SphereClass extends Object3D {
 
   toTHREEMesh() {
     const geometry = new THREE.SphereGeometry(this.radius, 20, 20);
-    const material = new THREE.MeshNormalMaterial();
+    const material = new THREE.MeshLambertMaterial({color: 0x00ff00});
 
     const mesh = new THREE.Mesh(geometry, material);
 
@@ -106,7 +106,7 @@ class CylinderClass extends Object3D {
 
   toTHREEMesh() {
     const geometry = new THREE.CylinderGeometry(this.r1, this.r2, this.h, this.fn);
-    const material = new THREE.MeshNormalMaterial();
+    const material = new THREE.MeshLambertMaterial({color: 0x0000ff});
 
     const mesh = new THREE.Mesh(geometry, material);
 
@@ -126,8 +126,8 @@ class BooleanBSP extends Object3D {
   }
 
   toTHREEMesh() {
-    const result = this.resultBSP.toMesh(new THREE.MeshNormalMaterial());
-    result.geometry.computeVertexNormals();
+    const result = this.resultBSP.toMesh(new THREE.MeshLambertMaterial({color:0xffff00}));
+    //result.geometry.computeVertexNormals();
     return this.locate(result);
   }
 }

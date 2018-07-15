@@ -1,14 +1,12 @@
-import * as THREE from 'three';
 import * as monaco from 'monaco-editor';
+import * as THREE from 'three';
+import { saveAs } from 'file-saver';
 import {
   OOMLScene, OOMLConfig, Cube, Cylinder, Sphere, Union, Difference, Intersection, Translate, Rotate,
 } from './lib/ooml';
-import { } from './lib/STLExporter';
-import { saveAs } from 'file-saver';
+import { OOML2STL } from './lib/OOML2STL';
 
 let renderer;
-let axes;
-let scene;
 
 function init() {
   const initialCode = `
@@ -60,10 +58,14 @@ function show(code) {
   const rendererEl = document.querySelector('.renderer');
   const { width, height } = rendererEl.getBoundingClientRect();
 
-  scene = new THREE.Scene();
+  const scene = new THREE.Scene();
+
+  const spotLight = new THREE.SpotLight(0xffffff);
+  spotLight.position.set(-240, 260, 210);
+  scene.add(spotLight);
 
   const planeGeometry = new THREE.PlaneGeometry(140, 140, 1, 1);
-  const planeMaterial = new THREE.MeshBasicMaterial({ color: 0xcccccc, wireframe: false });
+  const planeMaterial = new THREE.MeshLambertMaterial({ color: 0xffffff });
   const plane = new THREE.Mesh(planeGeometry, planeMaterial);
 
   plane.rotation.x = -0.5 * Math.PI;
@@ -92,8 +94,15 @@ function show(code) {
   );
 
   try {
-    
     f(OOMLScene, config, Cube, Cylinder, Sphere, Union, Difference, Intersection, Translate, Rotate);
+
+    if (config.makeSTL) {
+      const STLData = OOML2STL(OOMLScene);
+      STLData.forEach((data, i) => {
+        const blob = new Blob([data], { type: 'application/octet-stream' });
+        saveAs(blob, `escena${  i  }.stl`);
+      });
+    }
 
     OOMLScene.forEach((element) => {
       scene.add(element.toTHREEMesh());
@@ -107,12 +116,6 @@ function show(code) {
 
     renderer.render(scene, camera);
 
-    if (config.makeSTL) {
-      const exporter = new THREE.STLExporter();
-      const stlString = exporter.parse(scene);
-      const blob = new Blob([stlString], { type: 'text/plain' });
-      saveAs(blob, 'escena' + '.stl');
-    }
   } catch (e) {
     console.log('Error compiling', e);
   }
