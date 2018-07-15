@@ -65,13 +65,13 @@ function show(code) {
   spotLight.position.set(100, -200, 200);
   scene.add(spotLight);
 
-  const planeGeometry = new THREE.PlaneGeometry(200, 200, 1, 1);
-  const planeMaterial = new THREE.MeshLambertMaterial({ opacity: 0.5, color: 0x98f5ff, transparent: true });
-  const plane = new THREE.Mesh(planeGeometry, planeMaterial);
+  const plane = new THREE.Plane(new THREE.Vector3(0, 0, 1));
+  const helper = new THREE.PlaneHelper(plane, 200, 0x98f5ff);
+  scene.add(helper);
 
-  plane.position.set(0, 0, 0);
-
-  scene.add(plane);
+  const axes = new THREE.AxisHelper(20);
+  axes.position.set(-95,-95,1);
+  scene.add(axes);
 
   const grid = new THREE.GridHelper(200, 10);
   grid.geometry.rotateX(Math.PI / 2);
@@ -116,7 +116,7 @@ function show(code) {
     });
 
     const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000);
-    camera.position.set(0, -200, 200);
+    camera.position.set(0, -200, 180);
 
     // const vector = new THREE.Vector3(0, 0, 0);
     // camera.lookAt(vector);
