@@ -19,12 +19,6 @@ function remove(array, element) {
 
 class Object3D {
   constructor() {
-    this.rotateX = 0;
-    this.rotateY = 0;
-    this.rotateZ = 0;
-    this.xp = 0;
-    this.yp = 0;
-    this.zp = 0;
     OOMLScene.push(this);
     this.operation = [];
   }
@@ -39,10 +33,22 @@ class Object3D {
     return this;
   }
 
+  moveTo(x, y, z) {
+    this.operation.push(['m', [x, y, z]]);
+    return this;
+  }
+
   locate(mesh) {
     this.operation.forEach((element) => {
-      if (element[0] === 'r') mesh.rotation.set(element[1][0], element[1][1], element[1][2]);
-      if (element[0] === 't') mesh.position.set(element[1][0], element[1][1], element[1][2]);
+      if (element[0] === 'r') {
+        mesh.rotation.set(element[1][0], element[1][1], element[1][2]);
+      } else if (element[0] === 't') {
+        mesh.translateX(element[1][0]);
+        mesh.translateY(element[1][1]);
+        mesh.translateZ(element[1][2]);
+      } else if (element[0] === 'm') {
+        mesh.position.set(element[1][0], element[1][1], element[1][2]);
+      }
     });
     return mesh;
   }
@@ -58,7 +64,7 @@ class CubeClass extends Object3D {
 
   toTHREEMesh() {
     const geometry = new THREE.BoxGeometry(this.sx, this.sy, this.sz);
-    const material = new THREE.MeshLambertMaterial({color: 0xff0000});
+    const material = new THREE.MeshLambertMaterial({ color: 0xff0000 });
 
     const mesh = new THREE.Mesh(geometry, material);
 
@@ -74,7 +80,7 @@ class SphereClass extends Object3D {
 
   toTHREEMesh() {
     const geometry = new THREE.SphereGeometry(this.radius, 20, 20);
-    const material = new THREE.MeshLambertMaterial({color: 0x00ff00});
+    const material = new THREE.MeshLambertMaterial({ color: 0x00ff00 });
 
     const mesh = new THREE.Mesh(geometry, material);
 
@@ -106,7 +112,7 @@ class CylinderClass extends Object3D {
 
   toTHREEMesh() {
     const geometry = new THREE.CylinderGeometry(this.r1, this.r2, this.h, this.fn);
-    const material = new THREE.MeshLambertMaterial({color: 0x0000ff});
+    const material = new THREE.MeshLambertMaterial({ color: 0x0000ff });
 
     const mesh = new THREE.Mesh(geometry, material);
 
@@ -126,8 +132,8 @@ class BooleanBSP extends Object3D {
   }
 
   toTHREEMesh() {
-    const result = this.resultBSP.toMesh(new THREE.MeshLambertMaterial({color:0xffff00}));
-    //result.geometry.computeVertexNormals();
+    const result = this.resultBSP.toMesh(new THREE.MeshLambertMaterial({ color: 0xffff00 }));
+    // result.geometry.computeVertexNormals();
     return this.locate(result);
   }
 }
