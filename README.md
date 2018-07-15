@@ -21,25 +21,22 @@ Check the rest of dependencies on [package.json file](./package.json)
 
 ```javascript
 
-    myCube1 = Cube(0.2, 0.2, 0.2);
-    myCube2 = Cube(0.2, 0.2, 0.2);
-    myCube3 = Cube(0.2, 0.2, 0.2);
+  myCube1 = Cube(20, 20, 20);
+  myCube2 = Cube(20, 20, 20);
+  myCube3 = Cube(20, 20, 20);
+  
+  mySphere1 = Sphere(12);
+  mySphere2 = Sphere(12);
+  mySphere3 = Sphere(12);
 
-    mySphere1 = Sphere(0.12);
-    mySphere2 = Sphere(0.12);
-    mySphere3 = Sphere(0.12);
-    
-    myObj1 = Union(myCube1, mySphere1);
-    myObj2 = Difference(myCube2, mySphere2);
-    myObj3 = Intersection(myCube3, mySphere3);
-    
-    myObj1.rotate(45,0,0);
+  myObj1 = Union(myCube1, mySphere1);
+  myObj1.translate(0,10,0);
 
-    myObj2.translate(0.5, 0, 0);
-    myObj2.rotate(45,0,0);
+  myObj2 = Difference(myCube2, mySphere2);
+  myObj2.translate(40,10,0);
 
-    myObj3.translate(-0.5, 0, 0);
-    myObj3.rotate(45,0,0);
+  myObj3 = Intersection(myCube3, mySphere3);
+  myObj3.translate(-40,10,0);
 
 ```
 ### Example 2 - For loop
@@ -50,8 +47,8 @@ Check the rest of dependencies on [package.json file](./package.json)
 
 for(let i = -5; i<5; i++){
   for (let j=-5; j<5; j++){
-    let cube = Cube(0.03,0.03,0.1);
-    cube.translate(i/10,j/10,0);
+    let cube = Cube(3,10,3);
+    cube.translate(i*10,0,j*10);
   }
 }
 
