@@ -20,13 +20,14 @@ function init() {
   mySphere3 = Sphere(12);
 
   myObj1 = Union(myCube1, mySphere1);
-  myObj1.translate(0,10,0);
+  myObj1.moveTo(0,0,10);
 
   myObj2 = Difference(myCube2, mySphere2);
-  myObj2.translate(40,10,0);
+  myObj2.moveTo(40,0,10);
 
   myObj3 = Intersection(myCube3, mySphere3);
-  myObj3.translate(-40,10,0);
+  myObj3.moveTo(-40,0,10);
+
 
 
 `;
@@ -61,17 +62,21 @@ function show(code) {
   const scene = new THREE.Scene();
 
   const spotLight = new THREE.SpotLight(0xffffff);
-  spotLight.position.set(-240, 260, 210);
+  spotLight.position.set(100, -200, 200);
   scene.add(spotLight);
 
-  const planeGeometry = new THREE.PlaneGeometry(140, 140, 1, 1);
-  const planeMaterial = new THREE.MeshLambertMaterial({ color: 0xffffff });
-  const plane = new THREE.Mesh(planeGeometry, planeMaterial);
+  const plane = new THREE.Plane(new THREE.Vector3(0, 0, 1));
+  const helper = new THREE.PlaneHelper(plane, 200, 0x98f5ff);
+  scene.add(helper);
 
-  plane.rotation.x = -0.5 * Math.PI;
-  plane.position.set(0, 0, 0);
+  const axes = new THREE.AxisHelper(20);
+  axes.position.set(-95,-95,1);
+  scene.add(axes);
 
-  scene.add(plane);
+  const grid = new THREE.GridHelper(200, 10);
+  grid.geometry.rotateX(Math.PI / 2);
+  scene.add(grid);
+
 
   // programmed objects
   const config = OOMLConfig;
@@ -96,26 +101,28 @@ function show(code) {
   try {
     f(OOMLScene, config, Cube, Cylinder, Sphere, Union, Difference, Intersection, Translate, Rotate);
 
+    // save scene to STL?
     if (config.makeSTL) {
       const STLData = OOML2STL(OOMLScene);
       STLData.forEach((data, i) => {
         const blob = new Blob([data], { type: 'application/octet-stream' });
-        saveAs(blob, `escena${  i  }.stl`);
+        saveAs(blob, `escena${i}.stl`);
       });
     }
 
+    // Add OOML objects to THREE scene
     OOMLScene.forEach((element) => {
       scene.add(element.toTHREEMesh());
     });
 
-    const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000);
-    camera.position.x = -150;
-    camera.position.y = 150;
-    camera.position.z = 150;
+    const camera = new THREE.PerspectiveCamera(50, width / height, 0.1, 1000);
+    camera.position.set(0, -200, 180);
+
+    // const vector = new THREE.Vector3(0, 0, 0);
+    // camera.lookAt(vector);
+
     camera.lookAt(scene.position);
-
     renderer.render(scene, camera);
-
   } catch (e) {
     console.log('Error compiling', e);
   }
