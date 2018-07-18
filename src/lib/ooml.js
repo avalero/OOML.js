@@ -24,7 +24,11 @@ class Object3D {
   }
 
   rotate(x, y, z) {
-    this.operation.push(['r', [x, y, z]]);
+    const xg = Math.PI * x / 180;
+    const yg = Math.PI * y / 180;
+    const zg = Math.PI * z / 180;
+
+    this.operation.push(['r', [xg, yg, zg]]);
     return this;
   }
 
@@ -121,14 +125,15 @@ class CylinderClass extends Object3D {
 }
 
 class BooleanBSP extends Object3D {
-  constructor(OOMLMesh1, OOMLMesh2) {
+  constructor(args) {
     super();
-    this.OOMLMesh1 = OOMLMesh1;
-    this.OOMLMesh2 = OOMLMesh2;
+    this.OOMLMeshArr = args;
+    
+    // when meshes come together, remove them from scene
+    for (let i = 0; i<args.length; i++) {
+      remove(OOMLScene, args[i]);
+    }
 
-    // when to mesh come together, remove them from scene
-    remove(OOMLScene, OOMLMesh1);
-    remove(OOMLScene, OOMLMesh2);
   }
 
   toTHREEMesh() {
@@ -139,32 +144,41 @@ class BooleanBSP extends Object3D {
 }
 
 class UnionClassBSP extends BooleanBSP {
-  constructor(OOMLMesh1, OOMLMesh2) {
-    super(OOMLMesh1, OOMLMesh2);
-    const meshBSP1 = new ThreeBSP(OOMLMesh1.toTHREEMesh());
-    const meshBSP2 = new ThreeBSP(OOMLMesh2.toTHREEMesh());
+  constructor(args) {
+    super(args);
+    let unionMeshBSP = new ThreeBSP(args[0].toTHREEMesh());
+    for (let i = 1; i < args.length; i++) {
+      const bspMesh = new ThreeBSP(args[i].toTHREEMesh());
+      unionMeshBSP = unionMeshBSP.union(bspMesh);
+    }
 
-    this.resultBSP = meshBSP1.union(meshBSP2);
+    this.resultBSP = unionMeshBSP;
   }
 }
 
 class DifferenceClassBSP extends BooleanBSP {
-  constructor(OOMLMesh1, OOMLMesh2) {
-    super(OOMLMesh1, OOMLMesh2);
-    const meshBSP1 = new ThreeBSP(OOMLMesh1.toTHREEMesh());
-    const meshBSP2 = new ThreeBSP(OOMLMesh2.toTHREEMesh());
+  constructor(args) {
+    super(args);
+    let differenceMeshBSP = new ThreeBSP(args[0].toTHREEMesh());
+    for (let i = 1; i < args.length; i++) {
+      const bspMesh = new ThreeBSP(args[i].toTHREEMesh());
+      differenceMeshBSP = differenceMeshBSP.subtract(bspMesh);
+    }
 
-    this.resultBSP = meshBSP1.subtract(meshBSP2);
+    this.resultBSP = differenceMeshBSP;
   }
 }
 
 class IntersectionClassBSP extends BooleanBSP {
-  constructor(OOMLMesh1, OOMLMesh2) {
-    super(OOMLMesh1, OOMLMesh2);
-    const meshBSP1 = new ThreeBSP(OOMLMesh1.toTHREEMesh());
-    const meshBSP2 = new ThreeBSP(OOMLMesh2.toTHREEMesh());
+  constructor(args) {
+    super(args);
+    let intersectionMeshBSP = new ThreeBSP(args[0].toTHREEMesh());
+    for (let i = 1; i < args.length; i++) {
+      const bspMesh = new ThreeBSP(args[i].toTHREEMesh());
+      intersectionMeshBSP = intersectionMeshBSP.subtract(bspMesh);
+    }
 
-    this.resultBSP = meshBSP1.intersect(meshBSP2);
+    this.resultBSP = intersectionMeshBSP;
   }
 }
 
@@ -181,16 +195,16 @@ export function Cylinder(...args) {
   return new CylinderClass(...args);
 }
 
-export function Union(obj1, obj2) {
-  return new UnionClassBSP(obj1, obj2);
+export function Union(...args) {
+  return new UnionClassBSP(args);
 }
 
-export function Difference(obj1, obj2) {
-  return new DifferenceClassBSP(obj1, obj2);
+export function Difference(...args) {
+  return new DifferenceClassBSP(args);
 }
 
-export function Intersection(obj1, obj2) {
-  return new IntersectionClassBSP(obj1, obj2);
+export function Intersection(...args) {
+  return new IntersectionClassBSP(args);
 }
 
 export function Translate(xyz, ...args) {

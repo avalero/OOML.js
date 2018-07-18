@@ -115,7 +115,7 @@ function show(code) {
       scene.add(element.toTHREEMesh());
     });
 
-    const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000);
+    const camera = new THREE.PerspectiveCamera(50, width / height, 0.1, 1000);
     camera.position.set(0, -200, 180);
 
     // const vector = new THREE.Vector3(0, 0, 0);
