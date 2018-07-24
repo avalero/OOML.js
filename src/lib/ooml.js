@@ -128,12 +128,11 @@ class BooleanBSP extends Object3D {
   constructor(args) {
     super();
     this.OOMLMeshArr = args;
-    
+
     // when meshes come together, remove them from scene
-    for (let i = 0; i<args.length; i++) {
+    for (let i = 0; i < args.length; i++) {
       remove(OOMLScene, args[i]);
     }
-
   }
 
   toTHREEMesh() {
@@ -182,41 +181,31 @@ class IntersectionClassBSP extends BooleanBSP {
   }
 }
 
-export function Cube(sx, sy, sz) {
-  return new CubeClass(sx, sy, sz);
-}
+const Cube = (sx, sy, sz) => new CubeClass(sx, sy, sz);
 
-export function Sphere(r) {
-  return new SphereClass(r);
-}
+const Sphere = r => new SphereClass(r);
 
 
-export function Cylinder(...args) {
-  return new CylinderClass(...args);
-}
+const Cylinder = (...args) => new CylinderClass(...args);
 
-export function Union(...args) {
-  return new UnionClassBSP(args);
-}
+const Union = (...args) => new UnionClassBSP(args);
 
-export function Difference(...args) {
-  return new DifferenceClassBSP(args);
-}
+const Difference = (...args) => new DifferenceClassBSP(args);
 
-export function Intersection(...args) {
-  return new IntersectionClassBSP(args);
-}
+const Intersection = (...args) => new IntersectionClassBSP(args);
 
-export function Translate(xyz, ...args) {
+const Translate = (xyz, ...args) => {
   args.forEach((element) => {
     element.translate(xyz[0], xyz[1], xyz[2]);
   });
-}
+};
 
-export function Rotate(xyz, ...args) {
+const Rotate = (xyz, ...args) => {
   args.forEach((element) => {
     element.rotate(xyz[0], xyz[1], xyz[2]);
   });
-}
+};
 
-export { OOMLScene, OOMLConfig };
+export {
+  OOMLScene, OOMLConfig, Cube, Sphere, Cylinder, Union, Difference, Intersection, Translate, Rotate,
+};
