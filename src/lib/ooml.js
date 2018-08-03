@@ -206,6 +206,6 @@ const Rotate = (xyz, ...args) => {
   });
 };
 
-export { 
-OOMLScene, OOMLConfig, Cube, Sphere, Cylinder, Union, Difference, Intersection, Translate, Rotate,
+export {
+  OOMLScene, OOMLConfig, Cube, Sphere, Cylinder, Union, Difference, Intersection, Translate, Rotate,
 };
