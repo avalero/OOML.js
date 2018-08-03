@@ -17,6 +17,92 @@ function remove(array, element) {
   }
 }
 
+class OOMLView {
+  constructor(el, initialCode = '') {
+    this.el = el;
+    this.renderer = new THREE.WebGLRenderer();
+
+    this.renderer.setClearColor(0xEEEEEE);
+
+    this.updateSize();
+
+    this.el.appendChild(this.renderer.domElement);
+
+    this.updateCode(initialCode);
+  }
+
+  updateSize() {
+    const { width, height } = this.el.getBoundingClientRect();
+    this.width = width;
+    this.height = height;
+    this.renderer.setSize(width, height);
+  }
+
+  updateCode(code) {
+    const scene = new THREE.Scene();
+
+    const spotLight = new THREE.SpotLight(0xffffff);
+    spotLight.position.set(100, -200, 200);
+    scene.add(spotLight);
+
+    const plane = new THREE.Plane(new THREE.Vector3(0, 0, 1));
+    const helper = new THREE.PlaneHelper(plane, 200, 0x98f5ff);
+    scene.add(helper);
+
+    const axes = new THREE.AxisHelper(20);
+    axes.position.set(-95,-95,1);
+    scene.add(axes);
+
+    const grid = new THREE.GridHelper(200, 10);
+    grid.geometry.rotateX(Math.PI / 2);
+    scene.add(grid);
+
+    // programmed objects
+    const config = OOMLConfig;
+    config.makeSTL = false;
+
+    OOMLScene.length = 0;
+
+    const f = new Function(
+      'OOMLScene',
+      'config',
+      'Cube',
+      'Cylinder',
+      'Sphere',
+      'Union',
+      'Difference',
+      'Intersection',
+      'Translate',
+      'Rotate',
+      code,
+    );
+
+    try {
+      f(OOMLScene, config, Cube, Cylinder, Sphere, Union, Difference, Intersection, Translate, Rotate);
+
+      // Add OOML objects to THREE scene
+      OOMLScene.forEach((element) => {
+        scene.add(element.toTHREEMesh());
+      });
+
+      const camera = new THREE.PerspectiveCamera(50, this.width / this.height, 0.1, 1000);
+      camera.position.set(0, -200, 180);
+
+      // const vector = new THREE.Vector3(0, 0, 0);
+      // camera.lookAt(vector);
+
+      camera.lookAt(scene.position);
+      this.renderer.render(scene, camera);
+    } catch (e) {
+      console.log('Error compiling', e);
+    }
+  }
+
+  getSTL() {
+    return OOML2STL(this.scene);
+  }
+}
+
 class Object3D {
   constructor() {
     OOMLScene.push(this);
@@ -206,6 +292,4 @@ const Rotate = (xyz, ...args) => {
   });
 };
 
-export {
-  OOMLScene, OOMLConfig, Cube, Sphere, Cylinder, Union, Difference, Intersection, Translate, Rotate,
-};
+export { OOMLView, OOMLScene, OOMLConfig };
